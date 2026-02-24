@@ -157,42 +157,49 @@
 
     <script>
         const questions = [
+            // 0: 下段
             { text: "まずは一番下の層を選んでね", options: [
                 { word: "真性の", item: "フルーツポンチ", color: "pink", img: "layer1" },
                 { word: "優雅な", item: "あんこ", color: "blue", img: "layer1" },
                 { word: "熱血な", item: "フルーツヨーグルト", color: "red", img: "layer1" },
                 { word: "愉快な", item: "コーヒーゼリー", color: "yellow", img: "layer1" }
             ]},
+            // 1: 中段
             { text: "次は真ん中の層！", options: [
                 { word: "柔らかい", item: "スポンジ", color: "pink", img: "layer2" },
                 { word: "厳しい", item: "コーンフレーク", color: "blue", img: "layer2" },
                 { word: "暑苦しい", item: "プリン", color: "red", img: "layer2" },
                 { word: "眩しい", item: "白玉", color: "yellow", img: "layer2" }
             ]},
+            // 2: 上段
             { text: "フルーツを重ねよう", options: [
                 { word: "魅力的な", item: "いちご", color: "pink", img: "layer3" },
                 { word: "冷静で", item: "キウイ", color: "blue", img: "layer3" },
                 { word: "社交的な", item: "ブルーベリー", color: "red", img: "layer3" },
                 { word: "圧倒的な", item: "バナナ", color: "yellow", img: "layer3" }
             ]},
+            // 3: クリーム (これが最後にきます)
             { text: "ここでクリームの登場！", options: [
                 { word: "妖精", item: "ホイップクリーム", color: "pink", img: "cream" },
                 { word: "漁師", item: "クリームチーズ", color: "blue", img: "cream" },
                 { word: "冒険者", item: "カスタードクリーム", color: "red", img: "cream" },
                 { word: "天使", item: "胡麻クリーム", color: "yellow", img: "cream" }
             ]},
+            // 4: アイス
             { text: "メインのアイスをどうぞ", options: [
                 { word: "だけど", item: "バニラ", color: "pink", img: "ice" },
                 { word: "さらに", item: "ミント", color: "blue", img: "ice" },
                 { word: "やっぱり", item: "チョコ", color: "red", img: "ice" },
                 { word: "こんなわけで", item: "抹茶", color: "yellow", img: "ice" }
             ]},
+            // 5: トッピング
             { text: "トッピングで飾ろう", options: [
                 { word: "危ない", item: "マシュマロ", color: "pink", img: "top" },
                 { word: "爽やかな", item: "ビスケット", color: "blue", img: "top" },
                 { word: "アグレッシブな", item: "チョコソース", color: "red", img: "top" },
                 { word: "明るい", item: "きなこ", color: "yellow", img: "top" }
             ]},
+            // 6: リボン (二つ名には含めません)
             { text: "仕上げのリボンを選んでね", options: [
                 { word: "愛の", item: "ピンク", color: "pink", img: "ribbon" },
                 { word: "知性の", item: "水色", color: "blue", img: "ribbon" },
@@ -244,11 +251,21 @@
             }
         }
 
+        // 修正箇所：二つ名の順番を並び替える
         function showResult() {
             document.getElementById('question-screen').classList.add('hidden');
             document.getElementById('result-screen').classList.remove('hidden');
 
-            const catchphrase = selectedWords.slice(0, 6).join("");
+            // 質問の順番: 0:下段, 1:中段, 2:上段, 3:クリーム, 4:アイス, 5:トッピング
+            // 望ましい順番: 下段(0) + 中段(1) + 上段(2) + アイス(4) + トッピング(5) + クリーム(3)
+            const catchphrase = 
+                selectedWords[0] + 
+                selectedWords[1] + 
+                selectedWords[2] + 
+                selectedWords[4] + 
+                selectedWords[5] + 
+                selectedWords[3]; // クリームを最後に持ってくる
+
             document.getElementById('result-catchphrase').innerText = catchphrase;
 
             let maxColor = Object.keys(scoreTally).reduce((a, b) => scoreTally[a] >= scoreTally[b] ? a : b);
