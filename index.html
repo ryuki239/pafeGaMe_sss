@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Psycho-Parfait Final v8</title>
+    <title>パフェ診断ゲーム Final v8</title>
     <style>
         /* --- 基本設定 --- */
         body {
@@ -34,16 +34,15 @@
             margin: 0 auto 20px;
         }
 
-        /* 画像の基本設定 */
         .stage-area img {
             position: absolute;
             left: 0; 
             right: 0; 
-            margin: auto; /* 左右中央揃え */
+            margin: auto;
             transition: all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
         }
 
-        /* --- 質問・結果画面のデザイン --- */
+        /* --- 共通デザイン --- */
         .content-box {
             background: rgba(255, 255, 255, 0.95);
             padding: 30px;
@@ -54,9 +53,32 @@
             max-width: 400px;
         }
         
-        h1, h2 { color: #c2185b; margin-bottom: 15px; }
+        h1 { color: #c2185b; margin-bottom: 10px; font-size: 1.8rem; }
+        h2 { color: #c2185b; margin-bottom: 15px; }
         p { line-height: 1.6; margin-bottom: 20px; }
 
+        .hidden { display: none; }
+
+        /* --- ボタンデザイン --- */
+        .action-btn {
+            padding: 14px 50px;
+            background: linear-gradient(45deg, #f06292, #ec407a);
+            color: #fff;
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            margin-top: 10px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 4px 15px rgba(233, 30, 99, 0.4);
+        }
+        .action-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 20px rgba(233, 30, 99, 0.6);
+        }
+
+        /* --- 質問画面のスタイル --- */
         .options-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -76,42 +98,22 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            min-height: 70px; /* 少し高さを調整 */
+            min-height: 70px;
         }
 
         .select-btn:hover {
             background: #efebe9;
             border-color: #8d6e63;
-            transform: translateY(-3px);
-            box-shadow: 0 5px 10px rgba(0,0,0,0.1);
         }
 
-        /* 文字サイズを調整 */
-        .btn-item { 
-            font-size: 1.05rem; 
-            font-weight: bold; 
-            color: #5d4037; 
-            display: block;
-        }
-        
-        .hidden { display: none; }
+        .btn-item { font-weight: bold; }
 
-        .action-btn {
-            padding: 14px 50px;
-            background: linear-gradient(45deg, #f06292, #ec407a);
-            color: #fff;
-            border: none;
-            border-radius: 30px;
-            cursor: pointer;
-            margin-top: 25px;
-            font-size: 1.1rem;
+        /* 結果用二つ名 */
+        #result-catchphrase {
+            font-size: 1.25rem;
             font-weight: bold;
-            transition: transform 0.2s, box-shadow 0.2s;
-            box-shadow: 0 4px 15px rgba(233, 30, 99, 0.4);
-        }
-        .action-btn:hover {
-            transform: scale(1.05);
-            box-shadow: 0 6px 20px rgba(233, 30, 99, 0.6);
+            color: #ff69b4;
+            margin-bottom: 5px;
         }
     </style>
 </head>
@@ -120,179 +122,120 @@
     <div class="main-container">
         
         <div class="stage-area">
-            <img id="layer1-img" src="images/layer1_pink.png" class="hidden"
-                 style="bottom: 125px; z-index: 10; width: 90px !important;">
-
-            <img id="layer2-img" src="images/layer2_pink.png" class="hidden"
-                 style="bottom: 175px; z-index: 20; width: 130px !important;">
-
-            <img id="layer3-img" src="images/layer3_pink.png" class="hidden"
-                 style="bottom: 225px; z-index: 30; width: 160px !important;">
-
-            <img id="cream-img"  src="images/cream_pink.png"  class="hidden"
-                 style="bottom: 270px; z-index: 105; width: 170px !important;">
-
-            <img id="ice-img"    src="images/ice_pink.png"    class="hidden"
-                 style="bottom: 300px; z-index: 106; width: 160px !important;">
-
-            <img id="top-img"    src="images/top_pink.png"    class="hidden"
-                 style="bottom: 355px; z-index: 107; width: 60px !important;">
-            
-            <img id="glass-img"  src="images/glass.png"
-                 style="bottom: 0px; z-index: 100; width: 300px !important;">
-
-            <img id="ribbon-img" src="images/ribbon_pink.png" class="hidden"
-                 style="bottom: 45px; z-index: 110; width: 120px !important;">
+            <img id="layer1-img" src="" class="hidden" style="bottom: 125px; z-index: 10; width: 90px !important;">
+            <img id="layer2-img" src="" class="hidden" style="bottom: 175px; z-index: 20; width: 130px !important;">
+            <img id="layer3-img" src="" class="hidden" style="bottom: 225px; z-index: 30; width: 160px !important;">
+            <img id="cream-img"  src="" class="hidden" style="bottom: 270px; z-index: 105; width: 170px !important;">
+            <img id="ice-img"    src="" class="hidden" style="bottom: 300px; z-index: 106; width: 160px !important;">
+            <img id="top-img"    src="" class="hidden" style="bottom: 355px; z-index: 107; width: 60px !important;">
+            <img id="glass-img"  src="images/glass.png" style="bottom: 0px; z-index: 100; width: 300px !important;">
+            <img id="ribbon-img" src="" class="hidden" style="bottom: 45px; z-index: 110; width: 120px !important;">
         </div>
 
-        <div id="question-screen" class="content-box">
-            <h2 id="q-text">質問文がここに入ります</h2>
-            <div id="options-area" class="options-grid">
-                </div>
+        <div id="start-screen" class="content-box">
+            <h1>パフェ診断ゲーム</h1>
+            <p>今の気分に合わせて具材を選び、<br>あなただけの「深層心理パフェ」を<br>完成させましょう。</p>
+            <button class="action-btn" onclick="startGame()">パフェを作る</button>
+            <p style="font-size: 0.8rem; margin-top: 20px; color: #8d6e63;">アスパラ裏起毛</p>
+        </div>
+
+        <div id="question-screen" class="content-box hidden">
+            <h2 id="q-text">質問文</h2>
+            <div id="options-area" class="options-grid"></div>
         </div>
 
         <div id="result-screen" class="content-box hidden">
             <h1>完成しました！</h1>
             <p>あなたの深層心理タイプは…</p>
-            <h2 id="result-title" style="font-size: 1.4rem;">タイプ名</h2>
-            <p id="result-text" style="font-size: 0.95rem;">診断結果の文章</p>
+            <div id="result-catchphrase"></div>
+            <h2 id="result-title" style="font-size: 1.4rem; margin-top: 5px;"></h2>
+            <p id="result-text" style="font-size: 0.95rem;"></p>
             <button class="action-btn" onclick="location.reload()">もう一度作る</button>
         </div>
 
     </div>
 
     <script>
-        // --- 診断データ ---
-        // ※ word は内部計算用として残していますが、画面には表示されません
         const questions = [
-            // Q1: 下段
-            {
-                text: "まずは一番下の層を選んでね",
-                type: "select",
-                options: [
-                    { word: "魔性の", item: "フルーツポンチ", color: "pink", img: "layer1" },
-                    { word: "優雅な", item: "あんこ",         color: "blue", img: "layer1" },
-                    { word: "熱血な", item: "フルーツヨーグルト", color: "red", img: "layer1" },
-                    { word: "愉快な", item: "コーヒーゼリー",   color: "yellow",img: "layer1" }
-                ]
-            },
-            // Q2: 中段
-            {
-                text: "次は真ん中の層！",
-                type: "select",
-                options: [
-                    { word: "柔らかい", item: "スポンジ",       color: "pink", img: "layer2" },
-                    { word: "厳しい",   item: "コーンフレーク", color: "blue", img: "layer2" },
-                    { word: "暑苦しい", item: "プリン",         color: "red",  img: "layer2" },
-                    { word: "眩しい",   item: "白玉",           color: "yellow",img: "layer2" }
-                ]
-            },
-            // Q3: 上段
-            {
-                text: "フルーツを重ねよう",
-                type: "select",
-                options: [
-                    { word: "魅力的な", item: "いちご",         color: "pink", img: "layer3" },
-                    { word: "冷静で",   item: "キウイ",         color: "blue", img: "layer3" },
-                    { word: "社交的な", item: "ブルーベリー",   color: "red",  img: "layer3" },
-                    { word: "圧倒的な", item: "バナナ",         color: "yellow",img: "layer3" }
-                ]
-            },
-            // Q4: クリーム
-            {
-                text: "ここでクリームの登場！",
-                type: "select",
-                options: [
-                    { word: "妖精",     item: "ホイップクリーム",   color: "pink",   img: "cream" },
-                    { word: "漁師",     item: "クリームチーズ",     color: "blue",   img: "cream" },
-                    { word: "冒険者",   item: "カスタードクリーム", color: "red",    img: "cream" },
-                    { word: "天使",     item: "胡麻クリーム",       color: "yellow", img: "cream" }
-                ]
-            },
-            // Q5: アイス
-            {
-                text: "メインのアイスをどうぞ",
-                type: "select",
-                options: [
-                    { word: "だけど",   item: "バニラ",         color: "pink", img: "ice" },
-                    { word: "さらに",   item: "ミント",         color: "blue", img: "ice" },
-                    { word: "やっぱり", item: "チョコ",         color: "red",  img: "ice" },
-                    { word: "こんなわけで", item: "抹茶",       color: "yellow",img: "ice" }
-                ]
-            },
-            // Q6: トッピング
-            {
-                text: "トッピングで飾ろう",
-                type: "select",
-                options: [
-                    { word: "危ない",   item: "マシュマロ",     color: "pink", img: "top" },
-                    { word: "爽やかな", item: "ビスケット",     color: "blue", img: "top" },
-                    { word: "アグレッシブな", item: "チョコソース", color: "red", img: "top" },
-                    { word: "明るい",   item: "きなこ",         color: "yellow",img: "top" }
-                ]
-            },
-            // Q7: リボン
-            {
-                text: "仕上げのリボンを選んでね",
-                type: "select",
-                options: [
-                    { word: "愛の",     item: "ピンク",         color: "pink", img: "ribbon" },
-                    { word: "知性の",   item: "水色",           color: "blue", img: "ribbon" },
-                    { word: "情熱の",   item: "あか",           color: "red",  img: "ribbon" },
-                    { word: "希望の",   item: "黄色",           color: "yellow",img: "ribbon" }
-                ]
-            }
+            { text: "まずは一番下の層を選んでね", options: [
+                { word: "真性の", item: "フルーツポンチ", color: "pink", img: "layer1" },
+                { word: "優雅な", item: "あんこ", color: "blue", img: "layer1" },
+                { word: "熱血な", item: "フルーツヨーグルト", color: "red", img: "layer1" },
+                { word: "愉快な", item: "コーヒーゼリー", color: "yellow", img: "layer1" }
+            ]},
+            { text: "次は真ん中の層！", options: [
+                { word: "柔らかい", item: "スポンジ", color: "pink", img: "layer2" },
+                { word: "厳しい", item: "コーンフレーク", color: "blue", img: "layer2" },
+                { word: "暑苦しい", item: "プリン", color: "red", img: "layer2" },
+                { word: "眩しい", item: "白玉", color: "yellow", img: "layer2" }
+            ]},
+            { text: "フルーツを重ねよう", options: [
+                { word: "魅力的な", item: "いちご", color: "pink", img: "layer3" },
+                { word: "冷静で", item: "キウイ", color: "blue", img: "layer3" },
+                { word: "社交的な", item: "ブルーベリー", color: "red", img: "layer3" },
+                { word: "圧倒的な", item: "バナナ", color: "yellow", img: "layer3" }
+            ]},
+            { text: "ここでクリームの登場！", options: [
+                { word: "妖精", item: "ホイップクリーム", color: "pink", img: "cream" },
+                { word: "漁師", item: "クリームチーズ", color: "blue", img: "cream" },
+                { word: "冒険者", item: "カスタードクリーム", color: "red", img: "cream" },
+                { word: "天使", item: "胡麻クリーム", color: "yellow", img: "cream" }
+            ]},
+            { text: "メインのアイスをどうぞ", options: [
+                { word: "だけど", item: "バニラ", color: "pink", img: "ice" },
+                { word: "さらに", item: "ミント", color: "blue", img: "ice" },
+                { word: "やっぱり", item: "チョコ", color: "red", img: "ice" },
+                { word: "こんなわけで", item: "抹茶", color: "yellow", img: "ice" }
+            ]},
+            { text: "トッピングで飾ろう", options: [
+                { word: "危ない", item: "マシュマロ", color: "pink", img: "top" },
+                { word: "爽やかな", item: "ビスケット", color: "blue", img: "top" },
+                { word: "アグレッシブな", item: "チョコソース", color: "red", img: "top" },
+                { word: "明るい", item: "きなこ", color: "yellow", img: "top" }
+            ]},
+            { text: "仕上げのリボンを選んでね", options: [
+                { word: "愛の", item: "ピンク", color: "pink", img: "ribbon" },
+                { word: "知性の", item: "水色", color: "blue", img: "ribbon" },
+                { word: "情熱の", item: "あか", color: "red", img: "ribbon" },
+                { word: "希望の", item: "黄色", color: "yellow", img: "ribbon" }
+            ]}
         ];
 
         let currentStep = 0;
         let scoreTally = { pink: 0, blue: 0, red: 0, yellow: 0 };
+        let selectedWords = [];
 
-        const qText = document.getElementById("q-text");
-        const optionsArea = document.getElementById("options-area");
-
-        // 初期実行
-        showQuestion();
+        function startGame() {
+            document.getElementById('start-screen').classList.add('hidden');
+            document.getElementById('question-screen').classList.remove('hidden');
+            showQuestion();
+        }
 
         function showQuestion() {
             const q = questions[currentStep];
-            qText.textContent = q.text;
+            document.getElementById("q-text").textContent = q.text;
+            const area = document.getElementById("options-area");
+            area.innerHTML = "";
             
-            // エリアをリセット
-            optionsArea.innerHTML = "";
-            optionsArea.classList.remove("hidden");
-            
-            // ボタン生成
             q.options.forEach(opt => {
                 const btn = document.createElement("div");
                 btn.className = "select-btn";
-                // 【変更点】形容詞(opt.word)を表示せず、具材名(opt.item)だけを表示
-                btn.innerHTML = `
-                    <span class="btn-item">${opt.item}</span>
-                `;
+                btn.innerHTML = `<span class="btn-item">${opt.item}</span>`;
                 btn.onclick = () => selectOption(opt);
-                optionsArea.appendChild(btn);
+                area.appendChild(btn);
             });
         }
 
         function selectOption(opt) {
-            // スコア集計（診断対象の色のみカウント）
-            if (scoreTally[opt.color] !== undefined) {
-                scoreTally[opt.color]++;
-            }
+            if (scoreTally[opt.color] !== undefined) scoreTally[opt.color]++;
+            selectedWords.push(opt.word);
             
-            // 画像表示ロジック
-            const imgId = opt.img + "-img"; 
-            const imgEl = document.getElementById(imgId);
+            const imgEl = document.getElementById(opt.img + "-img");
             if(imgEl) {
-                // 通常通りファイル名を作成 (例: images/cream_blue.png)
                 imgEl.src = `images/${opt.img}_${opt.color}.png`;
                 imgEl.classList.remove("hidden");
             }
             
-            nextStep();
-        }
-
-        function nextStep() {
             currentStep++;
             if (currentStep < questions.length) {
                 showQuestion();
@@ -305,37 +248,35 @@
             document.getElementById('question-screen').classList.add('hidden');
             document.getElementById('result-screen').classList.remove('hidden');
 
-            // 最も多い色を判定
+            const catchphrase = selectedWords.slice(0, 6).join("");
+            document.getElementById('result-catchphrase').innerText = catchphrase;
+
             let maxColor = Object.keys(scoreTally).reduce((a, b) => scoreTally[a] >= scoreTally[b] ? a : b);
             
-            let resultTitle = "";
-            let resultText = "";
-            let titleColor = "#333";
+            let title = "", text = "", color = "#333";
 
-            // 結果判定
             if (maxColor === 'pink') {
-                resultTitle = "ほっこりさんタイプ";
-                resultText = "みんなを笑顔にさせる天才✨<br>周りを癒してくれるぬいぐるみのような存在です💖";
-                titleColor = "#e91e63"; 
+                title = "ほっこりさんタイプ";
+                text = "みんなを笑顔にさせる天才✨<br>周りを癒してくれるぬいぐるみのような存在です💖";
+                color = "#e91e63"; 
             } else if (maxColor === 'blue') {
-                resultTitle = "さわやかさんタイプ";
-                resultText = "あなたがいればグループワークは安心✨<br>冷静に周りを見てくれる先生のような存在です💖";
-                titleColor = "#00bcd4"; 
+                title = "さわやかさんタイプ";
+                text = "あなたがいればグループワークは安心✨<br>冷静に周りを見てくれる先生のような存在です💖";
+                color = "#00bcd4"; 
             } else if (maxColor === 'red') {
-                resultTitle = "リーダーさんタイプ";
-                resultText = "みんなが頼ってしまうリーダー✨<br>真ん中でグループを引っ張っていく姿はかっこいい💖";
-                titleColor = "#f44336"; 
+                title = "リーダーさんタイプ";
+                text = "みんなが頼ってしまうリーダー✨<br>真ん中でグループを引っ張っていく姿はかっこいい💖";
+                color = "#f44336"; 
             } else {
-                resultTitle = "キラキラさんタイプ";
-                resultText = "あなたはみんなの太陽となる明るい人✨<br>みんなの光となるカリスマ性があります💖";
-                titleColor = "#fbc02d"; 
+                title = "キラキラさんタイプ";
+                text = "あなたはみんなの太陽となる明るい人✨<br>みんなの光となるカリスマ性があります💖";
+                color = "#fbc02d"; 
             }
 
             const titleEl = document.getElementById('result-title');
-            titleEl.innerText = resultTitle;
-            titleEl.style.color = titleColor;
-            
-            document.getElementById('result-text').innerHTML = resultText;
+            titleEl.innerText = title;
+            titleEl.style.color = color;
+            document.getElementById('result-text').innerHTML = text;
         }
     </script>
 </body>
